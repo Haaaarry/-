@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        //1、需要用到的数据：
+        //1.1map<char,int>hash，依次插入s[i]，便于查找后来的s[i]是否在map中；
+        //1.2用count记录当前子串大小；
+        //1.3用maxlength记录最大值；
+        //1.4用start记录当前子串开始的位置
+        
+        //2、算法的思想
+        //2.1、遍历string
+        //if当前是s[i]可以在map中找到，并且他的value值在start之后，
+        //那么说明重复，从重复的value值开始重新寻找最大子列（将start置为hash[str[i]]，并且count置为i-start）;
+        //else count ++;
+        //2.2插入hash<str[i],i>,若重复则更新，不重复，则扩大map，这样可以保证
+        //重复时，那么重复的value值一定是最后一个与s[i]相匹配的
+        //ps：这里不能先插入，因为先插入，在进行map查找必定能找到（自己），那么这是没有意义的；
+            
+        //怎么检查算法正确性？空string，单字母string这样的特殊string要首先拿来检验。
+        
+        
+        map<char,int>hash;
+        int count=0,maxlength=0,start=0;
+        int i;
+        
+        
+        for(i=0;i<s.length();i++){
+            
+            if(hash.find(s[i])!=hash.end()&&hash[s[i]]>=start){
+                start=hash[s[i]];
+                count=i-start;
+            }else {
+                count++;
+                if(count>maxlength)
+                    maxlength=count;
+            }
+            
+            hash[s[i]]=i;
+            
+        } 
+        
+        if(s.length()==1)maxlength=1;
+        
+        return maxlength;
+    }
+};
